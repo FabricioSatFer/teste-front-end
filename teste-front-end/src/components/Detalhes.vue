@@ -1,14 +1,6 @@
 <template>
     <div class="detalhes">
         <v-container v-for="attr in detalhes" :key="attr.id">
-            <!-- <v-row>
-                <v-col cols="12" xs="12" md="6" offset-md="3">
-                <v-form ref="form" id="search" lazy-validation>
-                    <v-text-field class=" align-center" label="Procure um video" v-model="q" outlined append-icon="mdi-magnify" @click:append="getInfos"></v-text-field>
-                    <v-btn xs12 md6 class="primary" @click="getInfos">submit</v-btn>
-                </v-form>
-                </v-col>
-            </v-row> -->
             <v-row>
                 <v-col cols="12" lg="6" xs="12" offset-lg="3">
                 <h3>{{attr.snippet.title}}</h3>
@@ -47,7 +39,7 @@
     position: absolute;
     display: block;
     top: 70%;
-    left: 22%;
+    left: 20%;
     right: 0;
     bottom: 0;
     margin: auto;
@@ -61,11 +53,18 @@ import { METHODS } from 'http'
 export default {
     data:() => ({
         detalhes:[],
+        api: {
+            url: 'https://www.googleapis.com/youtube/v3/videos?', 
+            part: 'snippet,statistics',
+            key: 'AIzaSyA3AhhbXRWrjBjZG-UD1sYxgghgOPZNf2s', // chave ctestecasei1@gmail.com
+        }
         //green:"#429837"
     }),
 
     created(){
-        this.$http.get("https://www.googleapis.com/youtube/v3/videos?id="+this.$route.params.videoId+"&part=snippet,statistics&key=AIzaSyA3H9mjzts_872H73Or-5ppxvWWNRqtbdE")
+        const {url, part, key} = this.api;
+        const urlVideo = `${url}part=${part}&id=${this.$route.params.videoId}&key=${key}`
+        this.$http.get(urlVideo)
         .then(data => {
             console.log(data.body.items)
             this.detalhes = data.body.items
